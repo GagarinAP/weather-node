@@ -12,8 +12,10 @@ server.get('/', function (req, res) {
 });
 
 server.post('/', function (req, res) {
-  customer_name = req.body.customer_name;
+  /*customer_name = req.body.customer_name;
   weather = req.body.weather;
+  console.log(customer_name);
+		console.log(weather);*/
   res.send(index.getPage(req.body));
 });
 
