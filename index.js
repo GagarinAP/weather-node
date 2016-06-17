@@ -27,7 +27,7 @@ module.exports = (function() {
 	
 	var getMain = function (params) {		
 		return '<main><h1>Статистика погоди</h1><h3>містo: Рівне, Костопіль, Сарни, Дубно!</h3>' + 
-		getSearchForm() + Search() + AverageAll() +
+		getSearchForm() + Search(params) + AverageAll() +
 		ShowAll() +	
 		'</main>';
 	};
@@ -66,7 +66,7 @@ module.exports = (function() {
 	  array += '</table>';
 	  return array;
 	}
-	var AverageAll = function(){
+	var AverageAll = function(params){
 		var array = ""
 		  , data = getViewData()
 		  , AverageAllData = datamodule.AverageArray(data);
@@ -80,20 +80,22 @@ module.exports = (function() {
 	      return array;
 	}
 
-	var Search = function(){
+	var Search = function(params){
+		//console.log(customer_name);
+		//console.log(weather);
 	  var array = ""	  	
-	  	, data = getViewData(customer_name)
+	  	, data = getViewData(params)
 	  	, AverageAllData = datamodule.AverageArray(data)
 	  	, MaxAndPos = datamodule.MaxAndPosition(data);      
     	
-      if(weather > 2){        
+      if(params > 2){        
         array += '<table border="1"><caption><h1>' + 
         customer_name + 
         '</h1></caption><thead><tr><th>Вітер (напрям)</th></tr></thead>';                     
         array += '<tbody><tr><td>' + 
         AverageAllData[2] + 
         '</td></tr></tbody><table>';           
-      } else if (weather == 2){
+      } else if (params == 2){
         array += '<table border="1"><caption><h1>' + 
         customer_name + 
         '</h1></caption><thead><tr><th>Дата</th><th>Температура (&#176;C)</th></tr></thead>';                      
@@ -102,7 +104,7 @@ module.exports = (function() {
         MaxAndPos[2] + '</td></tr></tbody><table>';             
       } else {        
         array += '<table border="1"><caption><h1>' + 
-        customer_name + 
+        params + 
         '</h1></caption><thead><tr><th>Дата</th><th>Вологість (%)</th></tr></thead>';                      
         array += '<tbody><tr><td>' +
         MaxAndPos[1] + '</td><td>' + 
@@ -116,12 +118,14 @@ module.exports = (function() {
 		return '<form method="POST"><label>Enter town :</label><input type="text" name="customer_name"/><select name="weather"><option value="1">Вологість</option><option value="2">Температура</option><option value="3">Вітер</option></select><input type="submit"/></form>';
 	};
 	
-	var getViewData = function (customer_name) {		
-		if (!customer_name) {
+	var getViewData = function (params) {		
+		if (!params) {
 			return datamodule.data;
 		} 
-		if (customer_name) {			
-			return datamodule.searchByName(customer_name);
+		if (params.custom_name) {			
+			return datamodule.searchByName(params.custom_name);
+		}else if(params.weather){
+			return Search(params.weather);
 		}			
 	};		
 	
