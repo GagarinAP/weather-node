@@ -2,23 +2,28 @@ var datamodule = require('./module.js');
 
 module.exports = (function() {
 	
-	var getPage = function (params) {
+	var getPage = function (params) {		
 		return '<!DOCTYPE html><html lang="en">' + 
 		getPageHead() +
-		'<body>' + 
+		'<body><div class="container-fluid"><div class="container">' + 
 		getPageHeader() + 
 		getMain(params) +
-		getPageFooter() +
+		getPageFooter() + '</div></div>' +
+		'<script src=\"http://localhost:3000/jquery-1.12.4.min.js\"></script>' + 
+		'<script src=\"http://localhost:3000/bootstrap.min.js\"></script>' + 
 		'</body></html>';
 	};
 	
-	var getPageHead = function () {
-		var utf = "<meta charset=\"UTF-8\">";		
-		return '<head>' + utf + '<title>No way</title></head>';
+	var getPageHead = function () {			
+		return '<head>' + 
+		'<meta charset=\"UTF-8\">' + 
+		'<title>No way</title>' +		
+		'<link href=\"http://localhost:3000/bootstrap.css\" rel=\"stylesheet\">' + 
+		'</head>';
 	};
 	
 	var getPageHeader = function () {
-		return '<header></header>';
+		return '<header><h1 class="text-center">Статистика погоди</h1><h2 class="text-center">містo: Рівне, Костопіль, Сарни, Дубно!</h2></header>';
 	};
 	
 	var getPageFooter = function () {
@@ -26,9 +31,11 @@ module.exports = (function() {
 	};
 	
 	var getMain = function (params) {		
-		return '<main><h1>Статистика погоди</h1><h3>містo: Рівне, Костопіль, Сарни, Дубно!</h3>' + 
-		getSearchForm() + Search(params) + AverageAll() +
-		ShowAll() +	
+		return '<main>' + 		
+		getSearchForm() + 
+		search(params) + 
+		getForm() + 
+		searchForm(params) +		
 		'</main>';
 	};
 	
@@ -47,89 +54,97 @@ module.exports = (function() {
 			"<td>" + data[i].wind + "</td>" +
 			"</tr>";
 		}
-		return '<table border="1">' + result + '</table>';
-	};
+		return '<table class="table table-bordered">' + result + '</table>';
+	};	
 
-	var ShowAll = function(params){
-	  var data = getViewData(params);        
-	  var array = "";     
-	      for(var i = 0; i <data.length; i++){        
-	        array += '<table border="1"><caption><h1>' + data[i].position + '</h1></caption><thead><tr><th>#</th><th>Дата</th><th>Вологість (%)</th><th>Температура (&#176;C)</th><th>Вітер (напрям)</th></tr></thead>';
-	        for(var j = 0; j < 30; j++){
-	          array += '<tbody><tr><th scope="row">' + (j + 1) + 
-	          '</th><td>' + data[i].datetime[j] + 
-	          '</td><td>' + data[i].humidity[j] + 
-	          '</td><td>' + data[i].temperature[j] + 
-	          '</td><td>' + data[i].wind[j] + '</td></tbody>';
-	        }
-	      }
-	  array += '</table>';
-	  return array;
-	}
-	var AverageAll = function(params){
-		var array = ""
-		  , data = getViewData()
-		  , AverageAllData = datamodule.AverageArray(data);
-	      
-	      array += '<br><h2>Cереднє значення</h2><br>';
-	      array += '<table border="1"><thead><tr><th>Вологість (%)</th><th>Температура (&#176;C)</th><th>Вітер (напрям)</th></tr></thead>';
-	      array += '<tbody><tr><td>' + 
-	      parseInt(AverageAllData[0]) + '</td><td>' + 
-	      parseInt(AverageAllData[1]) + '</td><td>' + 
-	      AverageAllData[2] + '</td></tr></tbody><table>';      
-	      return array;
-	}
-
-	var Search = function(params){
-		//console.log(customer_name);
-		//console.log(weather);
-	  var array = ""	  	
-	  	, data = getViewData(params)
-	  	, AverageAllData = datamodule.AverageArray(data)
-	  	, MaxAndPos = datamodule.MaxAndPosition(data);      
+	var search = function(params){
+	    var array = ""	  	
+		  , data = getViewData(params)
+		  , averageAllData = datamodule.averageArray(data)
+		  , maxAndPos = datamodule.maxAndPosition(data);      
     	
-      if(params > 2){        
-        array += '<table border="1"><caption><h1>' + 
-        customer_name + 
-        '</h1></caption><thead><tr><th>Вітер (напрям)</th></tr></thead>';                     
-        array += '<tbody><tr><td>' + 
-        AverageAllData[2] + 
-        '</td></tr></tbody><table>';           
-      } else if (params == 2){
-        array += '<table border="1"><caption><h1>' + 
-        customer_name + 
-        '</h1></caption><thead><tr><th>Дата</th><th>Температура (&#176;C)</th></tr></thead>';                      
-        array += '<tbody><tr><td>' +
-        MaxAndPos[3] + '</td><td>' + 
-        MaxAndPos[2] + '</td></tr></tbody><table>';             
-      } else {        
-        array += '<table border="1"><caption><h1>' + 
-        params + 
-        '</h1></caption><thead><tr><th>Дата</th><th>Вологість (%)</th></tr></thead>';                      
-        array += '<tbody><tr><td>' +
-        MaxAndPos[1] + '</td><td>' + 
-        MaxAndPos[0] + '</td></tr></tbody><table>';       
-      }   
-      
-      return array;
-	}
-
+	    if (!data.length) {
+			return [];
+		}		
+	    if(params.weather > 2){        
+	        array += '<table class="table table-bordered"><caption><h1>' + 
+	        params.customer_name + 
+	        '</h1></caption><thead><tr><th>Вітер (напрям)</th></tr></thead>';                     
+	        array += '<tbody><tr><td>' + 
+	        averageAllData[2] + 
+	        '</td></tr></tbody><table>';           
+	    } else if (params.weather == 2){
+	        array += '<table class="table table-bordered"><caption><h1>' + 
+	        params.customer_name + 
+	        '</h1></caption><thead><tr><th>Дата</th><th>Температура (&#176;C)</th></tr></thead>';                      
+	        array += '<tbody><tr><td>' +
+	        maxAndPos[3] + '</td><td>' + 
+	        maxAndPos[2] + '</td></tr></tbody><table>';             
+	    } else {        
+	        array += '<table class="table table-bordered"><caption><h1>' + 
+	        params.customer_name + 
+	        '</h1></caption><thead><tr><th>Дата</th><th>Вологість (%)</th></tr></thead>';                      
+	        array += '<tbody><tr><td>' +
+	        maxAndPos[1] + '</td><td>' + 
+	        maxAndPos[0] + '</td></tr></tbody><table>';       
+	    }   
+	      
+	    return array;
+	};
+	var searchForm = function(params){
+		var array = ""			
+			, data = datamodule.data
+			, averageAllData = datamodule.averageArray(data);
+			if (!data.length) {
+				return [];
+			}			
+		    if(params.print == 1){
+		    	for(var i = 0; i < data.length; i++){        
+			        array += '<table class="table table-bordered"><caption><h1>' + data[i].position + '</h1></caption><thead><tr><th>#</th><th>Дата</th><th>Вологість (%)</th><th>Температура (&#176;C)</th><th>Вітер (напрям)</th></tr></thead>';
+			        for(var j = 0; j < 30; j++){
+			            array += '<tbody><tr><th scope="row">' + ( j + 1 ) + 
+			            '</th><td>' + data[i].datetime[j] + 
+			            '</td><td>' + data[i].humidity[j] + 
+			            '</td><td>' + data[i].temperature[j] + 
+			            '</td><td>' + data[i].wind[j] + '</td></tbody>';
+			        }
+			    }
+			  	array += '</table>';
+		    } else {
+		    	array += '<br><h2>Cереднє значення</h2><br>';
+			    array += '<table class="table table-bordered"><thead><tr><th>Вологість (%)</th><th>Температура (&#176;C)</th><th>Вітер (напрям)</th></tr></thead>';
+			    array += '<tbody><tr><td>' + 
+			    parseInt(averageAllData[0]) + '</td><td>' + 
+			    parseInt(averageAllData[1]) + '</td><td>' + 
+			    averageAllData[2] + '</td></tr></tbody><table>';
+		    }		    
+		return array;
+	};
 	var getSearchForm = function () {
-		return '<form method="POST"><label>Enter town :</label><input type="text" name="customer_name"/><select name="weather"><option value="1">Вологість</option><option value="2">Температура</option><option value="3">Вітер</option></select><input type="submit"/></form>';
+		return '<hr><h2 class="text-center">Форма пошуку максимального значення по містах.</h2><hr>'+
+		'<form method="POST"><label>Введіть місто : </label><input type="text" name="customer_name"/>'+
+		'<select name="weather"><option value="1">Вологість</option><option value="2">Температура</option><option value="3">Вітер</option></select><input type="submit"/>'+
+		'</form>';
+	};
+	var getForm = function () {
+		return '<hr><form method="POST"><select name="print"><option value="1">Всі точки</option><option value="2">Середнє по всіх</option></select><input type="submit"/></form>';
 	};
 	
 	var getViewData = function (params) {		
 		if (!params) {
 			return datamodule.data;
-		} 
-		if (params.custom_name) {			
-			return datamodule.searchByName(params.custom_name);
-		}else if(params.weather){
-			return Search(params.weather);
-		}			
+		} else if (params.customer_name) {			
+			return datamodule.searchByName(params.customer_name);
+		} else if (params.weather) {			
+			return search(params.weather);
+		} else if (params.print) {			
+			return search(params.print);
+		} else {
+			return [];
+		}	
 	};		
 	
-	return {
-		getPage: getPage
+	return {		
+		getPage: getPage		
 	};
 })();
