@@ -15,14 +15,14 @@ module.exports = (function(){
         return result;
 	};
 
-	function Randomizer(min,max){
+	function randomizer(min,max){
 		return parseInt(Math.random() * (max - min + 1) + min);
 	};
 
 	function setRandom(min, max){
         var result = [];
         for (var i = 0; i < 30; i++){
-            result.push(Randomizer(min, max));
+            result.push(randomizer(min, max));
         }
         return result;
     };
@@ -50,7 +50,7 @@ module.exports = (function(){
     	var result = [];
     	for(var j = 0; j < 30; j++){
 			var windname = ["N","NE","E","SE","S","SW","W","NW"];
-			var vector = parseInt(Randomizer(0,7));				
+			var vector = parseInt(randomizer(0,7));				
 			result.push(windname[vector]);			
 		}
 		return result;
@@ -78,8 +78,8 @@ module.exports = (function(){
 	            this[elem] = count.length;              
 	        }, ret);
 	    return ret;
-	}
-	var AverageArray = function(arr){
+	};
+	var averageArray = function(arr){
 		var result=[]
 		  , averagehumidity = 0
       	  , averagetemperature = 0
@@ -109,7 +109,7 @@ module.exports = (function(){
 	    
 		return result;
     };
-    var MaxAndPosition = function(arr){
+    var maxAndPosition = function(arr){
 		var result=[]		      	  
       	  , MaxByHumidity = 0
       	  , MaxByTemperature = 0
@@ -137,8 +137,8 @@ module.exports = (function(){
     };
 	return {
 		data:data,
-		MaxAndPosition:MaxAndPosition,
-		AverageArray:AverageArray,
+		maxAndPosition:maxAndPosition,
+		averageArray:averageArray,
 		searchByName:searchByName
 	};
 })();
