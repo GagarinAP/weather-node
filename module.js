@@ -1,3 +1,4 @@
+var _ = require('lodash-node');
 module.exports = ( function(){
 	var data = __constr();
 
@@ -119,11 +120,12 @@ module.exports = ( function(){
 	        for(var j = 0; j < 30; j++){
 	        	if(arr[i].humidity[j] > MaxByHumidity){
 	        		MaxByHumidity = arr[i].humidity[j];
-	        		PositionByHumidity = arr[i].datetime[j];
+	        		PositionByHumidity = arr[i].datetime[j];	        			        		
 	        	}
 	        	if(arr[i].temperature[j] > MaxByTemperature){
 	        		MaxByTemperature = arr[i].temperature[j];
 	        		PositionByTemperature = arr[i].datetime[j];
+	        		console.log(_.max(arr[0].temperature));
 	        	}	          	                   
 	        }	                     
 	    }
