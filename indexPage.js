@@ -1,5 +1,5 @@
 var mainModule = require('./module.js');
-
+var _ = require('lodash-node');
 module.exports = (function(){
 	var getPage = function(params){
 		var index = getHead() + 
@@ -82,9 +82,9 @@ module.exports = (function(){
 	    if (!data.length) {
 			return [];
 		}	
-		if (!params) {
+		/*if (!params) {
 			return "";
-		}	
+		}*/	
 	    if(params.paramWeather > 1){        
 	        result += '<table class="table table-bordered"><caption><h1>' + 
 	        params.nameFromForm + 
@@ -117,9 +117,9 @@ module.exports = (function(){
 			if (!data.length) {
 				return [];
 			}	
-			if (!params) {
+			/*if (!params) {
 				return "";
-			}			
+			}*/			
 		    if( params.print == 1 ){
 		    	result += '<br><h2>Всі значення погоди</h2><br>';
 		    	for(var i = 0; i < data.length; i++){        
@@ -137,8 +137,8 @@ module.exports = (function(){
 		    	result += '<br><h2>Cереднє значення</h2><br>';
 			    result += '<table class="table table-bordered"><thead><tr><th>Вологість (%)</th><th>Температура (&#176;C)</th><th>Вітер (напрям)</th></tr></thead>';
 			    result += '<tbody><tr><td>' + 
-			    parseInt(averageAllData[0]) + '</td><td>' + 
-			    parseInt(averageAllData[1]) + '</td><td>' + 
+			    _.round(averageAllData[0],2) + '</td><td>' + 
+			    _.round(averageAllData[1],2) + '</td><td>' + 
 			    averageAllData[2] + '</td></tr></tbody><table>';
 		    } else{
 		    	return "";
@@ -151,9 +151,15 @@ module.exports = (function(){
 		} 
 		if (params.nameFromForm) {
 			return mainModule.searchByName(params.nameFromForm);
-		} else if (params.paramWeather) {
+		} else {
+			return [];
+		}
+		if (params.paramWeather) {
 			return searchByParams(params.paramWeather);
-		} else if (params.print) {			
+		} else {
+			return [];
+		}
+		if (params.print) {			
 			return searchByParams(params.print);
 		} else {
 			return [];

@@ -96,8 +96,9 @@ module.exports = ( function(){
 	        result[0] = averagehumidity /= (arr[i].humidity).length;
 	    	result[1] = averagetemperature /= (arr[i].temperature).length;              
 	    }
+	    
 	    //Массив вираховує напрям вітру який частіше за інші дув
-	    var maximumWind = counter(averagewind);
+	    var maximumWind = counter(averagewind);	    
 	    for(key in maximumWind){
 	        if(maximumWind[key] > max){
 	            max = maximumWind[key];
@@ -110,30 +111,13 @@ module.exports = ( function(){
 		return result;
     };
     var maxAndPosition = function(arr){
-		var result=[]		      	  
-      	  , MaxByHumidity = 0
-      	  , MaxByTemperature = 0
-      	  , PositionByHumidity
-      	  , PositionByTemperature;      	
-
-		for(var i = 0; i < arr.length; i++){        
-	        for(var j = 0; j < 30; j++){
-	        	if(arr[i].humidity[j] > MaxByHumidity){
-	        		MaxByHumidity = arr[i].humidity[j];
-	        		PositionByHumidity = arr[i].datetime[j];	        			        		
-	        	}
-	        	if(arr[i].temperature[j] > MaxByTemperature){
-	        		MaxByTemperature = arr[i].temperature[j];
-	        		PositionByTemperature = arr[i].datetime[j];
-	        		console.log(_.max(arr[0].temperature));
-	        	}	          	                   
-	        }	                     
-	    }
-	    result[0] = MaxByHumidity;
-	    result[1] = PositionByHumidity;  
-	    result[2] = MaxByTemperature;
-	    result[3] = PositionByTemperature;
-	    
+		var result=[];
+		for(var i = 0; i < arr.length; i++){	        
+	        result[0] = _.max(arr[i].humidity);   
+	        result[1] = arr[i].datetime[_.indexOf(data[i].humidity, _.max(arr[i].humidity))]; 
+	        result[2] = _.max(arr[i].temperature); 
+	        result[3] = arr[i].datetime[_.indexOf(data[i].temperature, _.max(arr[i].temperature))];                  
+	    }	    
 		return result;
     };
     var getAll = function () {
