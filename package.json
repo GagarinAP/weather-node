@@ -1,8 +1,9 @@
 {
-	"name":"WeatherApplication",
-	"version":"0.0.1",
-	"dependencies":{
-		"express":"^4.0.0",
-		"body-parser":"^1.8.1"
-	}
+  "name": "WeatherApplication",
+  "version": "0.0.1",
+  "dependencies": {
+    "body-parser": "^1.8.1",
+    "express": "^4.0.0",
+    "lodash-node": "^3.10.2"
+  }
 }

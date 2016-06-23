@@ -67,6 +67,7 @@ module.exports = (function(){
 	var getFormPrint = function () {
 		return '<hr><form method="POST" class="form-inline">' +
 			   '<div class="col-xs-3"><select name="print" class="form-control">' +
+			   '<option value="0">Виберіть значення</option>' +
 			   '<option value="1">Всі точки</option>' +
 			   '<option value="2">Середнє по всіх</option>' +
 			   '</select></div><input class="btn btn-default" type="submit" value="Показати">' +
@@ -80,7 +81,10 @@ module.exports = (function(){
     	
 	    if (!data.length) {
 			return [];
-		}		
+		}	
+		if (!params) {
+			return "";
+		}	
 	    if(params.paramWeather > 1){        
 	        result += '<table class="table table-bordered"><caption><h1>' + 
 	        params.nameFromForm + 
@@ -112,8 +116,11 @@ module.exports = (function(){
 			, averageAllData = mainModule.averageArray(data);
 			if (!data.length) {
 				return [];
+			}	
+			if (!params) {
+				return "";
 			}			
-		    if(params.print == 1){
+		    if( params.print == 1 ){
 		    	result += '<br><h2>Всі значення погоди</h2><br>';
 		    	for(var i = 0; i < data.length; i++){        
 			        result += '<table class="table table-bordered"><caption><h1>' + data[i].position + '</h1></caption><thead><tr><th>#</th><th>Дата</th><th>Вологість (%)</th><th>Температура (&#176;C)</th><th>Вітер (напрям)</th></tr></thead>';
@@ -126,14 +133,16 @@ module.exports = (function(){
 			        }
 			    }
 			  	result += '</table>';
-		    } else {
+		    } else if ( params.print == 2 ){
 		    	result += '<br><h2>Cереднє значення</h2><br>';
 			    result += '<table class="table table-bordered"><thead><tr><th>Вологість (%)</th><th>Температура (&#176;C)</th><th>Вітер (напрям)</th></tr></thead>';
 			    result += '<tbody><tr><td>' + 
 			    parseInt(averageAllData[0]) + '</td><td>' + 
 			    parseInt(averageAllData[1]) + '</td><td>' + 
 			    averageAllData[2] + '</td></tr></tbody><table>';
-		    }		    
+		    } else{
+		    	return "";
+		    }	    
 		return result;
 	};
 	var getViewData = function (params) {		
