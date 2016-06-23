@@ -1,20 +1,21 @@
-var express = require('express');
-var bodyParser = require("body-parser");
-var index = require('./index.js');
-var app = express();
-
+const express = require('express');
+const bodyParser = require('body-parser');
+const indexPage = require('./indexPage.js');
+const app = express();
 
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 
-app.get('/', function (req, res) {
-    res.send(index.getPage());  
+app.get('/', function(req,res){
+	res.send(indexPage.getPage());
 });
-app.post('/', function (req, res) { 
-	res.send(index.getPage(req.body));
+app.post('/', function(req,res){
+	res.send(indexPage.getPage(req.body));
 });
-app.listen(3000, function () {	
-    console.log('Server weather listening on port 3000!');
+
+
+app.listen(3000, function(){
+	console.log('Server up in 3000 port!');
 });

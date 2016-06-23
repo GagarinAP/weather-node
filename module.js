@@ -1,4 +1,4 @@
-module.exports = (function(){
+module.exports = ( function(){
 	var data = __constr();
 
 	function __constr(){
@@ -15,14 +15,14 @@ module.exports = (function(){
         return result;
 	};
 
-	function randomizer(min,max){
+	function Randomizer(min,max){
 		return parseInt(Math.random() * (max - min + 1) + min);
 	};
 
 	function setRandom(min, max){
         var result = [];
         for (var i = 0; i < 30; i++){
-            result.push(randomizer(min, max));
+            result.push(Randomizer(min, max));
         }
         return result;
     };
@@ -35,11 +35,11 @@ module.exports = (function(){
     function setDatetime(){
     	var result = [];
     	for(var j = 0; j < 30; j++){
-			var d = new Date(2014, 5, j+1);
+			var d = new Date(2015, 5, j+1);
 			var options = {				  
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric'				  
+				day: 'numeric',
+				month: 'numeric',
+				year: 'numeric'				  
 		    };
 		    result.push(d.toLocaleString("ru", options));
 		}
@@ -50,7 +50,7 @@ module.exports = (function(){
     	var result = [];
     	for(var j = 0; j < 30; j++){
 			var windname = ["N","NE","E","SE","S","SW","W","NW"];
-			var vector = parseInt(randomizer(0,7));				
+			var vector = parseInt(Randomizer(0,7));				
 			result.push(windname[vector]);			
 		}
 		return result;
@@ -65,10 +65,9 @@ module.exports = (function(){
 		}		
 		return result;
 	};
-	
 	//Функція підрахунку вітрів, повертає обєкт {NE:17, S:12, SE:11 ...}
 	function counter(arr){
-	    var ret = {};
+	    var result = {};
 	        arr.forEach( function(elem,i,arr){            
 	            if( elem in this) 
 	                return;
@@ -76,9 +75,9 @@ module.exports = (function(){
 	                return elem === elemA;
 	            });
 	            this[elem] = count.length;              
-	        }, ret);
-	    return ret;
-	};
+	        }, result);
+	    return result;
+	}
 	var averageArray = function(arr){
 		var result=[]
 		  , averagehumidity = 0
@@ -93,8 +92,8 @@ module.exports = (function(){
 	          averagetemperature += arr[i].temperature[j];
 	          averagewind.push(arr[i].wind[j]);         
 	        }	 
-	        result[0] = averagehumidity /= 30;
-	    	result[1] = averagetemperature /= 30;              
+	        result[0] = averagehumidity /= (arr[i].humidity).length;
+	    	result[1] = averagetemperature /= (arr[i].temperature).length;              
 	    }
 	    //Массив вираховує напрям вітру який частіше за інші дув
 	    var maximumWind = counter(averagewind);
@@ -135,8 +134,11 @@ module.exports = (function(){
 	    
 		return result;
     };
+    var getAll = function () {
+		return data;
+	};
 	return {
-		data:data,
+		getAll:getAll,
 		maxAndPosition:maxAndPosition,
 		averageArray:averageArray,
 		searchByName:searchByName
