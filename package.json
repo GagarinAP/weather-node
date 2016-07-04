@@ -1,5 +1,4 @@
-{
-<<<<<<< HEAD
+{  
   "name": "WeatherApplication",
   "version": "0.0.1",
   "dependencies": {
@@ -9,12 +8,3 @@
     "lodash-node": "^3.10.2"
   }
 }
-=======
-	"name" : "ModuleStatisticWeather",
-	"version" : "0.0.1",
-	"dependencies": {
-		"express": "^4.0.0",
-		"body-parser": "^1.8.1"
-	}
-}
->>>>>>> 2d2c6c5... add node-js file
